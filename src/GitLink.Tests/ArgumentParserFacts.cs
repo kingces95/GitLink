@@ -1,36 +1,24 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArgumentParserFacts.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+using Catel.Test;
+using NUnit.Framework;
 
-
-namespace GitLink.Tests
-{
-    using Catel.Test;
-    using NUnit.Framework;
-
+namespace GitLink.Tests {
     [TestFixture]
-    public class ArgumentParserFacts
-    {
+    public class ArgumentParserFacts {
         [TestCase]
-        public void ReturnsHelpForEmptyParameters()
-        {
+        public void ReturnsHelpForEmptyParameters() {
             var context = ArgumentParser.ParseArguments(string.Empty);
             Assert.IsTrue(context.IsHelp);
         }
 
         [TestCase]
-        public void CorrectlyParsesSolutionDirectory()
-        {
+        public void CorrectlyParsesSolutionDirectory() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
         }
 
         [TestCase]
-        public void CorrectlyParsesLogFilePath()
-        {
+        public void CorrectlyParsesLogFilePath() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -l logFilePath");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -38,8 +26,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesPdbFilesDirectory()
-        {
+        public void CorrectlyParsesPdbFilesDirectory() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -d pdbFilesDirectory");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -47,24 +34,21 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesHelp()
-        {
+        public void CorrectlyParsesHelp() {
             var context = ArgumentParser.ParseArguments("-h");
 
             Assert.IsTrue(context.IsHelp);
         }
 
         [TestCase]
-        public void CorrectlyParsesSolutionFile()
-        {
+        public void CorrectlyParsesSolutionFile() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -f someSolution");
 
             Assert.AreEqual("someSolution", context.SolutionFile);
         }
 
         [TestCase]
-        public void CorrectlyParsesUrlAndBranchName()
-        {
+        public void CorrectlyParsesUrlAndBranchName() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -b somebranch");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -73,8 +57,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesUrlAndConfiguration()
-        {
+        public void CorrectlyParsesUrlAndConfiguration() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -c someConfiguration");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -83,8 +66,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesUrlAndConfigurationAndPlatform()
-        {
+        public void CorrectlyParsesUrlAndConfigurationAndPlatform() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -c someConfiguration -p \"Any CPU\"");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -94,8 +76,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesUrlAndConfigurationWithDebug()
-        {
+        public void CorrectlyParsesUrlAndConfigurationWithDebug() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -debug -c someConfiguration");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -105,8 +86,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesIgnoredProjects()
-        {
+        public void CorrectlyParsesIgnoredProjects() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -debug -c someConfiguration -ignore test1,test2");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -120,8 +100,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesIncludedProjects()
-        {
+        public void CorrectlyParsesIncludedProjects() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -debug -c someConfiguration -include test1,test2");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -135,8 +114,7 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void CorrectlyParsesIncludedProjectsWithRegex()
-        {
+        public void CorrectlyParsesIncludedProjectsWithRegex() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -debug -c someConfiguration -include test1,/*.test*2/");
 
             Assert.AreEqual("solutionDirectory", context.SolutionDirectory);
@@ -150,14 +128,12 @@ namespace GitLink.Tests
         }
 
         [TestCase]
-        public void ThrowsExceptionForUnknownArgument()
-        {
+        public void ThrowsExceptionForUnknownArgument() {
             ExceptionTester.CallMethodAndExpectException<GitLinkException>(() => ArgumentParser.ParseArguments("solutionDirectory -x logFilePath"));
         }
 
         [TestCase]
-        public void PowershellDownloadSetToTrue()
-        {
+        public void PowershellDownloadSetToTrue() {
             var context = ArgumentParser.ParseArguments("solutionDirectory -u http://github.com/CatenaLogic/GitLink -powershell");
 
             Assert.IsTrue(context.DownloadWithPowershell);

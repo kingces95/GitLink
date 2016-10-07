@@ -1,17 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TaskItemExtensions.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2016 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Diagnostics;
+using Microsoft.Build.Framework;
 
-
-namespace GitLinkTask
-{
-    using System.Diagnostics;
-    using Microsoft.Build.Framework;
-
-    public static class TaskItemExtensions
-    {
+namespace GitLinkTask {
+    public static class TaskItemExtensions {
         [DebuggerStepThrough]
         public static string FullPath(this ITaskItem item) => item.GetMetadata("FullPath");
 

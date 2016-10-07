@@ -1,9 +1,7 @@
-namespace GitLink.Build.Construction
-{
-    using System.IO;
+using System.IO;
 
-    public interface ISolutionParser
-    {
+namespace GitLink.Build.Construction {
+    public interface ISolutionParser {
         StreamReader SolutionReader { get; set; }
         object[] Projects { get; }
         void ParseSolution();

@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContextExtensions.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Catel;
+using Catel.IO;
 
-
-namespace GitLink
-{
-    using Catel;
-    using Catel.IO;
-
-    public static class ContextExtensions
-    {
-        public static string GetRelativePath(this Context context, string fullPath)
-        {
+namespace GitLink {
+    public static class ContextExtensions {
+        public static string GetRelativePath(this Context context, string fullPath) {
             Argument.IsNotNull(() => context);
             Argument.IsNotNull(() => fullPath);
 

@@ -1,23 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GitHubIntegration.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using NUnit.Framework;
 
-
-namespace GitLink.Tests.IntegrationTests
-{
-    using NUnit.Framework;
-
+namespace GitLink.Tests.IntegrationTests {
     [TestFixture, Explicit]
-    public class GitHubIntegration : IntegrationTestBase
-    {
+    public class GitHubIntegration : IntegrationTestBase {
         public const string Url = "https://github.com/CatenaLogic/GitLinkTestRepro";
         public const string Directory = @"C:\Source\GitLinkTestRepro_GitHub";
 
         [Test]
-        public void CorrectlyUpdatesPdbFiles()
-        {
+        public void CorrectlyUpdatesPdbFiles() {
             const string directory = Directory;
             const string configurationName = "Release";
 

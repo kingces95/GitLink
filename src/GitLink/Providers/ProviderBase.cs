@@ -1,29 +1,19 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProviderBase.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.IO;
+using System.Linq;
+using Catel;
+using Catel.Logging;
+using GitTools;
+using GitTools.Git;
+using LibGit2Sharp;
 
-
-namespace GitLink.Providers
-{
-    using System;
-    using System.IO;
-    using System.Linq;
-    using Catel;
-    using Catel.Logging;
-    using GitTools;
-    using GitTools.Git;
-    using LibGit2Sharp;
-
-    public abstract class ProviderBase : IProvider
-    {
+namespace GitLink.Providers {
+    public abstract class ProviderBase : IProvider {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly IRepositoryPreparer _repositoryPreparer;
 
-        protected ProviderBase(IRepositoryPreparer repositoryPreparer)
-        {
+        protected ProviderBase(IRepositoryPreparer repositoryPreparer) {
             Argument.IsNotNull(() => repositoryPreparer);
 
             _repositoryPreparer = repositoryPreparer;
@@ -61,15 +51,13 @@ namespace GitLink.Providers
 
         public abstract bool Initialize(string url);
 
-        public string GetShaHashOfCurrentBranch(Context context, TemporaryFilesContext temporaryFilesContext)
-        {
+        public string GetShaHashOfCurrentBranch(Context context, TemporaryFilesContext temporaryFilesContext) {
             Argument.IsNotNull(() => context);
 
             string commitSha = null;
             var repositoryDirectory = context.SolutionDirectory;
 
-            if (_repositoryPreparer.IsPreparationRequired(context))
-            {
+            if (_repositoryPreparer.IsPreparationRequired(context)) {
                 Log.Info("No local repository is found in '{0}', creating a temporary one", repositoryDirectory);
 
                 repositoryDirectory = _repositoryPreparer.Prepare(context, temporaryFilesContext);
@@ -77,29 +65,23 @@ namespace GitLink.Providers
 
             repositoryDirectory = GitDirFinder.TreeWalkForGitDir(repositoryDirectory);
 
-            using (var repository = new Repository(repositoryDirectory))
-            {
-                if (string.IsNullOrEmpty(context.ShaHash))
-                {
+            using (var repository = new Repository(repositoryDirectory)) {
+                if (string.IsNullOrEmpty(context.ShaHash)) {
                     Log.Info("No sha hash is available on the context, retrieving latest commit of current branch");
 
                     var lastCommit = repository.Commits.First();
                     commitSha = lastCommit.Sha;
-                }
-                else
-                {
+                } else {
                     Log.Info("Checking if commit with sha hash '{0}' exists on the repository", context.ShaHash);
 
                     var commit = repository.Commits.FirstOrDefault(c => string.Equals(c.Sha, context.ShaHash, StringComparison.OrdinalIgnoreCase));
-                    if (commit != null)
-                    {
+                    if (commit != null) {
                         commitSha = commit.Sha;
                     }
                 }
             }
 
-            if (commitSha == null)
-            {
+            if (commitSha == null) {
                 throw Log.ErrorAndCreateException<GitLinkException>("Cannot find commit '{0}' in repo.", context.ShaHash);
             }
 

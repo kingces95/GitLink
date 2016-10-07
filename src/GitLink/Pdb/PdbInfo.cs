@@ -1,20 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PdbInfo.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using Catel;
 
-
-namespace GitLink.Pdb
-{
-    using System;
-    using System.Collections.Generic;
-    using Catel;
-
-    public class PdbInfo
-    {
-        public PdbInfo()
-        {
+namespace GitLink.Pdb {
+    public class PdbInfo {
+        public PdbInfo() {
             Guid = new Guid();
             StreamToPdbName = new SortedDictionary<int, PdbName>();
             NameToPdbName = new SortedDictionary<string, PdbName>();
@@ -37,22 +27,19 @@ namespace GitLink.Pdb
         public string[] SrcSrv { get; set; }
         public byte[] Tail { get; set; }
 
-        public void ClearFlags()
-        {
+        public void ClearFlags() {
             FlagIndexes.Clear();
             FlagIndexToPdbName.Clear();
         }
 
-        public void AddFlag(PdbName name)
-        {
+        public void AddFlag(PdbName name) {
             Argument.IsNotNull(() => name);
 
             FlagIndexes.Add(name.FlagIndex);
             FlagIndexToPdbName.Add(name.FlagIndex, name);
         }
 
-        public void AddName(PdbName name)
-        {
+        public void AddName(PdbName name) {
             Argument.IsNotNull(() => name);
 
             StreamToPdbName.Add(name.Stream, name);

@@ -1,23 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GitHubProviderFacts.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using GitLink.Providers;
+using NUnit.Framework;
 
-
-namespace GitLink.Tests.Providers
-{
-    using GitLink.Providers;
-    using NUnit.Framework;
-
-    public class GitHubProviderFacts
-    {
+namespace GitLink.Tests.Providers {
+    public class GitHubProviderFacts {
         [TestFixture]
-        public class TheGitHubProviderInitialization
-        {
+        public class TheGitHubProviderInitialization {
             [TestCase]
-            public void ReturnsValidInitialization()
-            {
+            public void ReturnsValidInitialization() {
                 var provider = new GitHubProvider();
                 var valid = provider.Initialize("https://github.com/CatenaLogic/GitLink");
 
@@ -25,8 +14,7 @@ namespace GitLink.Tests.Providers
             }
 
             [TestCase]
-            public void ReturnsInValidInitialization()
-            {
+            public void ReturnsInValidInitialization() {
                 var provider = new GitHubProvider();
                 var valid = provider.Initialize("https://bitbucket.org/CatenaLogic/GitLink");
 
@@ -35,11 +23,9 @@ namespace GitLink.Tests.Providers
         }
 
         [TestFixture]
-        public class TheGitHubProviderProperties
-        {
+        public class TheGitHubProviderProperties {
             [TestCase]
-            public void ReturnsValidCompany()
-            {
+            public void ReturnsValidCompany() {
                 var provider = new GitHubProvider();
                 provider.Initialize("https://github.com/CatenaLogic/GitLink");
 
@@ -47,8 +33,7 @@ namespace GitLink.Tests.Providers
             }
 
             [TestCase]
-            public void ReturnsValidCompanyUrl()
-            {
+            public void ReturnsValidCompanyUrl() {
                 var provider = new GitHubProvider();
                 provider.Initialize("https://github.com/CatenaLogic/GitLink");
 
@@ -56,8 +41,7 @@ namespace GitLink.Tests.Providers
             }
 
             [TestCase]
-            public void ReturnsValidProject()
-            {
+            public void ReturnsValidProject() {
                 var provider = new GitHubProvider();
                 provider.Initialize("https://github.com/CatenaLogic/GitLink");
 
@@ -65,8 +49,7 @@ namespace GitLink.Tests.Providers
             }
 
             [TestCase]
-            public void ReturnsValidProjectUrl()
-            {
+            public void ReturnsValidProjectUrl() {
                 var provider = new GitHubProvider();
                 provider.Initialize("https://github.com/CatenaLogic/GitLink");
 
@@ -74,8 +57,7 @@ namespace GitLink.Tests.Providers
             }
 
             [TestCase]
-            public void ReturnsValidRawGitUrl()
-            {
+            public void ReturnsValidRawGitUrl() {
                 var provider = new GitHubProvider();
                 provider.Initialize("https://github.com/CatenaLogic/GitLink");
 

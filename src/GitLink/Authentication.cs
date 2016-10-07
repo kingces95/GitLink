@@ -5,14 +5,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace GitLink
-{
+namespace GitLink {
     using System;
 
-    public class Authentication
-    {
-        public Authentication()
-        {
+    public class Authentication {
+        public Authentication() {
             Username = Environment.GetEnvironmentVariable("GITLINK_REMOTE_USERNAME");
             Password = Environment.GetEnvironmentVariable("GITLINK_REMOTE_PASSWORD");
         }

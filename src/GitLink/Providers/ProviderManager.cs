@@ -1,15 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProviderManager.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+﻿using Catel.IoC;
+using Catel.Reflection;
 
 namespace GitLink.Providers
 {
-    using Catel.IoC;
-    using Catel.Reflection;
-
     public class ProviderManager : IProviderManager
     {
         public ProviderBase GetProvider(string url)

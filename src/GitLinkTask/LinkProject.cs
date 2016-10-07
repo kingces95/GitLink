@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LinkProject.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2016 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.IO;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
-
-namespace GitLinkTask
-{
-    using System.IO;
-    using Microsoft.Build.Framework;
-    using Microsoft.Build.Utilities;
-
-    public class LinkProject : ToolTask
-    {
+namespace GitLinkTask {
+    public class LinkProject : ToolTask {
         [Required]
         public ITaskItem SolutionDirectory { get; set; }
 

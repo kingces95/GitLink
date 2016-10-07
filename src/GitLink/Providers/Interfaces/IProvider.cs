@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IProvider.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using GitTools;
 
-
-namespace GitLink.Providers
-{
-    using GitTools;
-
-    public interface IProvider
-    {
+namespace GitLink.Providers {
+    public interface IProvider {
         /// <summary>
         /// Gets or sets the name of the company.
         /// </summary>

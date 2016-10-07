@@ -1,25 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContextExtensionsFacts.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using GitLink.Providers;
+using NUnit.Framework;
 
-
-namespace GitLink.Tests.Extensions
-{
-    using GitLink.Providers;
-    using NUnit.Framework;
-
-    public class ContextExtensionsFacts
-    {
+namespace GitLink.Tests.Extensions {
+    public class ContextExtensionsFacts {
         [TestFixture]
-        public class TheGetRelativePathMethod
-        {
+        public class TheGetRelativePathMethod {
             [TestCase]
-            public void ReturnsRelativePathWithDirectoryDownwards()
-            {
-                var context = new Context(new ProviderManager())
-                {
+            public void ReturnsRelativePathWithDirectoryDownwards() {
+                var context = new Context(new ProviderManager()) {
                     SolutionDirectory = @"c:\source\GitLink"
                 };
 
@@ -29,10 +17,8 @@ namespace GitLink.Tests.Extensions
             }
 
             [TestCase]
-            public void ReturnsRelativePathWithDirectoryUpwards()
-            {
-                var context = new Context(new ProviderManager())
-                {
+            public void ReturnsRelativePathWithDirectoryUpwards() {
+                var context = new Context(new ProviderManager()) {
                     SolutionDirectory = @"c:\source\GitLink"
                 };
 

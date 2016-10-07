@@ -5,18 +5,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace GitLink
-{
+namespace GitLink {
     using System;
     using Catel.Logging;
     using Logging;
 
-    internal class Program
-    {
+    internal class Program {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static int Main(string[] args)
-        {
+        private static int Main(string[] args) {
 #if DEBUG
             LogManager.AddDebugListener(true);
 #endif
@@ -24,16 +21,14 @@ namespace GitLink
             var consoleLogListener = new OutputLogListener();
             LogManager.AddListener(consoleLogListener);
 
-            try
-            {
+            try {
                 HelpWriter.WriteAppHeader(s => Log.Write(LogEvent.Info, s));
 
                 Log.Info("Arguments: {0}", string.Join(" ", args));
                 Log.Info(string.Empty);
 
                 var context = ArgumentParser.ParseArguments(args);
-                if (context.IsHelp)
-                {
+                if (context.IsHelp) {
                     HelpWriter.WriteHelp(s => Log.Write(LogEvent.Info, s));
 
                     WaitForKeyPress();
@@ -50,9 +45,7 @@ namespace GitLink
 #endif
 
                 return result;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.Error(ex, "An unexpected error occurred");
 
 #if DEBUG
@@ -63,8 +56,7 @@ namespace GitLink
             }
         }
 
-        private static void WaitForKeyPress()
-        {
+        private static void WaitForKeyPress() {
             Log.Info(string.Empty);
             Log.Info("Press any key to continue");
 

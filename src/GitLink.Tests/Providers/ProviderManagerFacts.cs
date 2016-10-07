@@ -1,36 +1,22 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProviderManagerFacts.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using GitLink.Providers;
+using NUnit.Framework;
 
-
-namespace GitLink.Tests.Providers
-{
-    using System;
-    using GitLink.Providers;
-    using NUnit.Framework;
-
-    public class ProviderManagerFacts
-    {
+namespace GitLink.Tests.Providers {
+    public class ProviderManagerFacts {
         [TestFixture]
-        public class TheProviderGetProviderMethod
-        {
+        public class TheProviderGetProviderMethod {
             [TestCase("https://bitbucket.org/CatenaLogic/GitLink", typeof(BitBucketProvider))]
             [TestCase("https://github.com/CatenaLogic/GitLink", typeof(GitHubProvider))]
             [TestCase("https://example.com/repo", typeof(CustomRawUrlProvider))]
             [TestCase("", null)]
-            public void ReturnsRightProvider(string url, Type expectedType)
-            {
+            public void ReturnsRightProvider(string url, Type expectedType) {
                 var providerManager = new ProviderManager();
                 var provider = providerManager.GetProvider(url);
 
-                if (expectedType == null)
-                {
+                if (expectedType == null) {
                     Assert.IsNull(provider);
-                }
-                else
-                {
+                } else {
                     Assert.IsInstanceOf(expectedType, provider);
                 }
             }

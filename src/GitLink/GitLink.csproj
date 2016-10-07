@@ -88,7 +88,6 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ArgumentParser.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Authentication.cs" />
     <Compile Include="Extensions\ContextExtensions.cs" />

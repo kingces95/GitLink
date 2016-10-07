@@ -1,35 +1,23 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IntegrationTestBase.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using ApprovalTests;
+using Catel.Logging;
+using Catel.Reflection;
+using GitLink.Providers;
+using Microsoft.Win32;
 
-
-namespace GitLink.Tests.IntegrationTests
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using ApprovalTests;
-    using Catel.Logging;
-    using Catel.Reflection;
-    using GitLink.Providers;
-    using Microsoft.Win32;
-
-    public class IntegrationTestBase
-    {
+namespace GitLink.Tests.IntegrationTests {
+    public class IntegrationTestBase {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        protected void PrepareTestSolution(string directory, string configurationName)
-        {
-            if (!Directory.Exists(directory))
-            {
+        protected void PrepareTestSolution(string directory, string configurationName) {
+            if (!Directory.Exists(directory)) {
                 throw new Exception(string.Format("Please make sure to clone the repository to '{0}'", directory));
             }
 
             var outputDirectory = Path.Combine(directory, "output");
-            if (Directory.Exists(outputDirectory))
-            {
+            if (Directory.Exists(outputDirectory)) {
                 Log.Info("Deleting directory '{0}'", outputDirectory);
 
                 Directory.Delete(outputDirectory, true);
@@ -51,12 +39,10 @@ namespace GitLink.Tests.IntegrationTests
             process.WaitForExit();
         }
 
-        protected int RunGitLink(string directory, string repositoryUrl, string branchName, string configurationName)
-        {
+        protected int RunGitLink(string directory, string repositoryUrl, string branchName, string configurationName) {
             PrepareTestSolution(directory, configurationName);
 
-            var context = new Context(new ProviderManager())
-            {
+            var context = new Context(new ProviderManager()) {
                 SolutionDirectory = directory,
                 TargetUrl = repositoryUrl,
                 TargetBranch = branchName
@@ -65,8 +51,7 @@ namespace GitLink.Tests.IntegrationTests
             return Linker.Link(context);
         }
 
-        protected void VerifyUpdatedPdbs(string directory, string configurationName)
-        {
+        protected void VerifyUpdatedPdbs(string directory, string configurationName) {
             var outputDirectoryBase = Path.Combine(directory, "output", configurationName);
 
             VerifyUpdatedPdb(outputDirectoryBase, "CSharpTestLibrary", true);
@@ -75,12 +60,10 @@ namespace GitLink.Tests.IntegrationTests
             VerifyUpdatedPdb(outputDirectoryBase, "VisualBasicTestLibrary");
         }
 
-        private void VerifyUpdatedPdb(string outputDirectoryBase, string name, bool verifySrcSrv = false)
-        {
+        private void VerifyUpdatedPdb(string outputDirectoryBase, string name, bool verifySrcSrv = false) {
             var pdbFileName = Path.Combine(outputDirectoryBase, name, string.Format("{0}.pdb", name));
 
-            if (verifySrcSrv)
-            {
+            if (verifySrcSrv) {
                 // Required for Approvals
                 var pdbSrcSrvFileName = string.Format("{0}.srcsrv", pdbFileName);
                 var pdbSrcSrvTxtFileName = string.Format("{0}.txt", pdbSrcSrvFileName);
@@ -94,26 +77,21 @@ namespace GitLink.Tests.IntegrationTests
             var containsServer = false;
 
             var pdbContents = File.ReadAllLines(pdbFileName);
-            foreach (var pdbContent in pdbContents)
-            {
-                if (pdbContent.Contains("SRCSRV: variables"))
-                {
+            foreach (var pdbContent in pdbContents) {
+                if (pdbContent.Contains("SRCSRV: variables")) {
                     containsVariables = true;
                 }
 
-                if (pdbContent.Contains("SRCSRVVERCTRL="))
-                {
+                if (pdbContent.Contains("SRCSRVVERCTRL=")) {
                     containsControl = true;
                 }
 
-                if (pdbContent.Contains("SRCSRVTRG="))
-                {
+                if (pdbContent.Contains("SRCSRVTRG=")) {
                     containsServer = true;
                 }
             }
 
-            if (!containsVariables || !containsControl || !containsServer)
-            {
+            if (!containsVariables || !containsControl || !containsServer) {
                 throw new Exception("Generated pdb file is invalid");
             }
         }

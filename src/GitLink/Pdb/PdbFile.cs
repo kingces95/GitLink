@@ -1,15 +1,13 @@
-﻿namespace GitLink.Pdb
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using Catel;
-    using Catel.Logging;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Catel;
+using Catel.Logging;
 
-    public class PdbFile : IDisposable
-    {
+namespace GitLink.Pdb {
+    public class PdbFile : IDisposable {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private const string SrcSrvContent = "srcsrv";
@@ -26,12 +24,11 @@
         private readonly SortedSet<int> _freePages;
         private readonly byte[] _zerosPage;
 
-        public PdbFile(string path)
-        {
+        public PdbFile(string path) {
             Argument.IsNotNullOrWhitespace(() => path);
 
             Path = path;
- 
+
             _fs = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             _br = new BinaryReader(_fs, Encoding.UTF8, true);
             _bw = new BinaryWriter(_fs, Encoding.UTF8, true);
@@ -47,18 +44,15 @@
 
         public string Path { get; private set; }
 
-        public string PathSrcSrv
-        {
+        public string PathSrcSrv {
             get { return Path + ".srcsrv"; }
         }
 
-        public bool HasSrcSrv
-        {
+        public bool HasSrcSrv {
             get { return Info.NameToPdbName.ContainsKey(SrcSrvContent); }
         }
 
-        public int SrcSrv
-        {
+        public int SrcSrv {
             get { return Info.NameToPdbName[SrcSrvContent].Stream; }
         }
 
@@ -66,8 +60,7 @@
 
         public PdbRoot Root { get; private set; }
 
-        public PdbRoot Stream0
-        {
+        public PdbRoot Stream0 {
             get { return ReadRoot(Root.Streams[0]); }
         }
 
@@ -75,18 +68,15 @@
 
         public int PageCount { get; private set; }
 
-        private void CheckPdbHeader()
-        {
+        private void CheckPdbHeader() {
             var msf = String.Format("Microsoft C/C++ MSF 7.00\r\n{0}DS\0\0\0", (char)0x1A);
             var bytes = Encoding.UTF8.GetBytes(msf);
-            if (!bytes.SequenceEqual(_br.ReadBytes(32)))
-            {
+            if (!bytes.SequenceEqual(_br.ReadBytes(32))) {
                 throw Log.ErrorAndCreateException<GitLinkException>("Pdb header didn't match");
             }
         }
 
-        private void ReadPdbHeader()
-        {
+        private void ReadPdbHeader() {
             // TODO: Create PdbHeader struct
 
             _pageByteCount = _br.ReadInt32(); // 0x20
@@ -97,35 +87,28 @@
             RootPage = _br.ReadInt32(); // 0x34
         }
 
-        private void CheckPdb()
-        {
+        private void CheckPdb() {
             var length = _fs.Length;
-            if (length % _pageByteCount != 0)
-            {
+            if (length % _pageByteCount != 0) {
                 throw Log.ErrorAndCreateException<GitLinkException>("pdb length {0} bytes per page <> 0, {1}, {2}", length, _pageByteCount,
                     PageCount);
             }
 
-            if (length / _pageByteCount != PageCount)
-            {
+            if (length / _pageByteCount != PageCount) {
                 throw Log.ErrorAndCreateException<GitLinkException>("pdb length does not match page count, length: {0}, bytes per page: {1}, page count: {2}",
                         length, _pageByteCount, PageCount);
             }
         }
 
-        private PdbRoot ReadRoot(PdbStream streamRoot)
-        {
+        private PdbRoot ReadRoot(PdbStream streamRoot) {
             Argument.IsNotNull(() => streamRoot);
 
             var root = new PdbRoot(streamRoot);
-            using (var brDirectory = StreamReader(streamRoot))
-            {
+            using (var brDirectory = StreamReader(streamRoot)) {
                 var streamCount = brDirectory.ReadInt32();
-                if (streamCount != 0x0131CA0B)
-                {
+                if (streamCount != 0x0131CA0B) {
                     var streams = root.Streams;
-                    for (var i = 0; i < streamCount; i++)
-                    {
+                    for (var i = 0; i < streamCount; i++) {
                         var stream = new PdbStream();
                         streams.Add(stream);
 
@@ -136,10 +119,8 @@
                         stream.Pages = new int[pageCount];
                     }
 
-                    for (var i = 0; i < streamCount; i++)
-                    {
-                        for (var j = 0; j < streams[i].Pages.Length; j++)
-                        {
+                    for (var i = 0; i < streamCount; i++) {
+                        for (var j = 0; j < streams[i].Pages.Length; j++) {
                             var page = brDirectory.ReadInt32();
                             streams[i].Pages[j] = page;
                         }
@@ -150,67 +131,56 @@
             return root;
         }
 
-        public PdbStream GetRootPdbStream()
-        {
+        public PdbStream GetRootPdbStream() {
             var pdbStream = new PdbStream();
             pdbStream.ByteCount = _rootByteCount;
             pdbStream.Pages = new int[CountPages(_rootByteCount)];
 
             GoToPage(RootPage);
 
-            for (var i = 0; i < pdbStream.Pages.Length; i++)
-            {
+            for (var i = 0; i < pdbStream.Pages.Length; i++) {
                 pdbStream.Pages[i] = _br.ReadInt32();
             }
 
             return pdbStream;
         }
 
-        private PdbRoot GetRoot()
-        {
+        private PdbRoot GetRoot() {
             var pdbRootStream = GetRootPdbStream();
             return ReadRoot(pdbRootStream);
         }
 
         #region Reading methods
 
-        private int CountPages(int byteCount)
-        {
+        private int CountPages(int byteCount) {
             return (byteCount + _pageByteCount - 1) / _pageByteCount;
         }
 
-        private void GoToPage(int page)
-        {
+        private void GoToPage(int page) {
             _br.BaseStream.Position = page * _pageByteCount;
         }
 
-        private void GoToEnd()
-        {
+        private void GoToEnd() {
             _fs.Seek(0L, SeekOrigin.End);
         }
 
-        private void ReadPage(byte[] bytes, int page, int offset, int count)
-        {
+        private void ReadPage(byte[] bytes, int page, int offset, int count) {
             GoToPage(page);
 
             var read = _br.Read(bytes, offset, count);
-            if (read != count)
-            {
+            if (read != count) {
                 throw Log.ErrorAndCreateException<GitLinkException>("tried reading {0} bytes at offset {1}, but only read {2}", count, offset, read);
             }
         }
 
-        private byte[] ReadStreamBytes(PdbStream stream)
-        {
+        private byte[] ReadStreamBytes(PdbStream stream) {
             Argument.IsNotNull(() => stream);
 
             var bytes = new byte[stream.ByteCount];
             var pages = stream.Pages;
 
-            if (pages.Length != 0)
-            {
-                for (var i = 0; i < pages.Length - 1; i++)
-                {
+            if (pages.Length != 0) {
+                for (var i = 0; i < pages.Length - 1; i++) {
                     ReadPage(bytes, pages[i], i * _pageByteCount, _pageByteCount);
                 }
 
@@ -221,33 +191,27 @@
             return bytes;
         }
 
-        private MemoryStream ReadStream(PdbStream stream)
-        {
+        private MemoryStream ReadStream(PdbStream stream) {
             return new MemoryStream(ReadStreamBytes(stream));
         }
 
-        private BinaryReader StreamReader(PdbStream stream)
-        {
+        private BinaryReader StreamReader(PdbStream stream) {
             return new BinaryReader(ReadStream(stream));
         }
 
         #endregion
 
-        private PdbInfo InternalInfo()
-        {
+        private PdbInfo InternalInfo() {
             var info = new PdbInfo();
 
             var root = GetRoot();
-            if (root.Streams.Count <= 1)
-            {
+            if (root.Streams.Count <= 1) {
                 throw Log.ErrorAndCreateException<GitLinkException>("Expected at least 2 streams inside the pdb root, but only found '{0}', cannot read pdb info",
                     root.Streams.Count);
             }
 
-            using (var ms = new MemoryStream(ReadStreamBytes(root.Streams[1])))
-            {
-                using (var br = new BinaryReader(ms))
-                {
+            using (var ms = new MemoryStream(ReadStreamBytes(root.Streams[1]))) {
+                using (var br = new BinaryReader(ms)) {
                     info.Version = br.ReadInt32(); // 0x00 of stream
                     info.Signature = br.ReadInt32(); // 0x04
                     info.Age = br.ReadInt32(); // 0x08
@@ -262,24 +226,20 @@
                     info.FlagCount = br.ReadInt32();
 
                     var flags = new int[info.FlagCount]; // bit flags for each nameCountMax
-                    for (var i = 0; i < flags.Length; i++)
-                    {
+                    for (var i = 0; i < flags.Length; i++) {
                         flags[i] = br.ReadInt32();
                     }
 
                     br.BaseStream.Position += 4; // 0
                     var positions = new List<Tuple<int, PdbName>>(nameCount);
-                    for (var i = 0; i < info.FlagIndexMax; i++)
-                    {
+                    for (var i = 0; i < info.FlagIndexMax; i++) {
                         var flagIndex = i / 32;
-                        if (flagIndex >= flags.Length)
-                        {
+                        if (flagIndex >= flags.Length) {
                             break;
                         }
 
                         var flag = flags[flagIndex];
-                        if ((flag & (1 << (i % 32))) != 0)
-                        {
+                        if ((flag & (1 << (i % 32))) != 0) {
                             var position = br.ReadInt32();
                             var name = new PdbName();
                             name.FlagIndex = i;
@@ -289,16 +249,14 @@
                         }
                     }
 
-                    if (positions.Count != nameCount)
-                    {
+                    if (positions.Count != nameCount) {
                         throw Log.ErrorAndCreateException<GitLinkException>("names count, {0} <> {1}", positions.Count, nameCount);
                     }
 
                     var tailByteCount = GetRoot().Streams[1].ByteCount - br.BaseStream.Position;
-                    info.Tail = br.ReadBytes((int) tailByteCount);
+                    info.Tail = br.ReadBytes((int)tailByteCount);
 
-                    foreach (var tuple in positions)
-                    {
+                    foreach (var tuple in positions) {
                         br.BaseStream.Position = namesByteStart + tuple.Item1;
                         tuple.Item2.Name = br.ReadCString();
                         info.AddName(tuple.Item2);
@@ -309,25 +267,21 @@
             }
         }
 
-        private List<int> AllocPages(int n)
-        {
+        private List<int> AllocPages(int n) {
             var pages = new List<int>();
             var free = _freePages.ToList();
             var nFree = n <= free.Count ? n : free.Count;
             var nAlloc = n <= free.Count ? 0 : n - free.Count;
-            for (var i = 0; i < nFree; i++)
-            {
+            for (var i = 0; i < nFree; i++) {
                 var page = free[i];
                 pages.Add(page);
                 _freePages.Remove(page);
             }
 
-            if (nAlloc > 0)
-            {
+            if (nAlloc > 0) {
                 GoToEnd();
 
-                for (var i = 0; i < nAlloc; i++)
-                {
+                for (var i = 0; i < nAlloc; i++) {
                     var page = (int)_fs.Position / _pageByteCount;
                     pages.Add(page);
 
@@ -338,25 +292,21 @@
             return pages;
         }
 
-        public byte[] ReadPdbStreamBytes(PdbStream pdbStream)
-        {
+        public byte[] ReadPdbStreamBytes(PdbStream pdbStream) {
             Argument.IsNotNull(() => pdbStream);
 
             return ReadStreamBytes(pdbStream);
         }
 
-        public byte[] ReadStreamBytes(int stream)
-        {
+        public byte[] ReadStreamBytes(int stream) {
             return ReadStreamBytes(Root.Streams[stream]);
         }
 
-        public PdbInfo Info
-        {
+        public PdbInfo Info {
             get { return _info ?? (_info = InternalInfo()); }
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             // Move to dispose
             _bw.Close();
             _br.Close();

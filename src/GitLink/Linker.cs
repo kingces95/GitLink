@@ -5,8 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace GitLink
-{
+namespace GitLink {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -21,12 +20,10 @@ namespace GitLink
     /// <summary>
     /// Class Linker.
     /// </summary>
-    public static class Linker
-    {
+    public static class Linker {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        public static int Link(Context context)
-        {
+        public static int Link(Context context) {
             int? exitCode = null;
 
             var stopWatch = new Stopwatch();
@@ -34,8 +31,7 @@ namespace GitLink
 
             context.ValidateContext();
 
-            if (!string.IsNullOrEmpty(context.LogFile))
-            {
+            if (!string.IsNullOrEmpty(context.LogFile)) {
                 var fileLogListener = new FileLogListener(context.LogFile, 25 * 1024);
                 fileLogListener.IsDebugEnabled = context.IsDebug;
 
@@ -43,26 +39,20 @@ namespace GitLink
                 LogManager.AddListener(fileLogListener);
             }
 
-            using (var temporaryFilesContext = new TemporaryFilesContext())
-            {
+            using (var temporaryFilesContext = new TemporaryFilesContext()) {
                 Log.Info("Extracting embedded pdbstr.exe");
 
                 var pdbStrFile = temporaryFilesContext.GetFile("pdbstr.exe");
                 ResourceHelper.ExtractEmbeddedResource("GitLink.Resources.Files.pdbstr.exe", pdbStrFile);
 
-                try
-                {
+                try {
                     var projects = new List<Project>();
                     string[] solutionFiles;
-                    if (string.IsNullOrEmpty(context.SolutionFile))
-                    {
+                    if (string.IsNullOrEmpty(context.SolutionFile)) {
                         solutionFiles = Directory.GetFiles(context.SolutionDirectory, "*.sln", SearchOption.AllDirectories);
-                    }
-                    else
-                    {
+                    } else {
                         var pathToSolutionFile = Path.Combine(context.SolutionDirectory, context.SolutionFile);
-                        if (!File.Exists(pathToSolutionFile))
-                        {
+                        if (!File.Exists(pathToSolutionFile)) {
                             Log.Error("Could not find solution file: {0}", pathToSolutionFile);
                             return -1;
                         }
@@ -70,15 +60,13 @@ namespace GitLink
                         solutionFiles = new[] { pathToSolutionFile };
                     }
 
-                    foreach (var solutionFile in solutionFiles)
-                    {
+                    foreach (var solutionFile in solutionFiles) {
                         var solutionProjects = ProjectHelper.GetProjects(solutionFile, context.ConfigurationName, context.PlatformName);
                         projects.AddRange(solutionProjects);
                     }
 
                     var provider = context.Provider;
-                    if (provider == null)
-                    {
+                    if (provider == null) {
                         throw Log.ErrorAndCreateException<GitLinkException>("Cannot find a matching provider for '{0}'", context.TargetUrl);
                     }
 
@@ -93,44 +81,35 @@ namespace GitLink
                     Log.Info("Found '{0}' project(s)", projectCount);
                     Log.Info(string.Empty);
 
-                    foreach (var project in projects)
-                    {
-                        try
-                        {
+                    foreach (var project in projects) {
+                        try {
                             var projectName = project.GetProjectName();
-                            if (ProjectHelper.ShouldBeIgnored(projectName, context.IncludedProjects, context.IgnoredProjects))
-                            {
+                            if (ProjectHelper.ShouldBeIgnored(projectName, context.IncludedProjects, context.IgnoredProjects)) {
                                 Log.Info("Ignoring '{0}'", project.GetProjectName());
                                 Log.Info(string.Empty);
                                 continue;
                             }
 
-                            if (context.IsDebug)
-                            {
+                            if (context.IsDebug) {
                                 project.DumpProperties();
                             }
 
-                            if (!LinkProject(context, project, pdbStrFile, shaHash, context.PdbFilesDirectory))
-                            {
+                            if (!LinkProject(context, project, pdbStrFile, shaHash, context.PdbFilesDirectory)) {
                                 failedProjects.Add(project);
                             }
-                        }
-                        catch (Exception)
-                        {
+                        } catch (Exception) {
                             failedProjects.Add(project);
                         }
                     }
 
                     Log.Info("All projects are done. {0} of {1} succeeded", projectCount - failedProjects.Count, projectCount);
 
-                    if (failedProjects.Count > 0)
-                    {
+                    if (failedProjects.Count > 0) {
                         Log.Info(string.Empty);
                         Log.Info("The following projects have failed:");
                         Log.Indent();
 
-                        foreach (var failedProject in failedProjects)
-                        {
+                        foreach (var failedProject in failedProjects) {
                             Log.Info("* {0}", context.GetRelativePath(failedProject.GetProjectName()));
                         }
 
@@ -138,13 +117,9 @@ namespace GitLink
                     }
 
                     exitCode = (failedProjects.Count == 0) ? 0 : -1;
-                }
-                catch (GitLinkException ex)
-                {
+                } catch (GitLinkException ex) {
                     Log.Error(ex, "An error occurred");
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     Log.Error(ex, "An unexpected error occurred");
                 }
 
@@ -156,8 +131,7 @@ namespace GitLink
 
             exitCode = exitCode ?? -1;
 
-            if (context.ErrorsAsWarnings && exitCode != 0)
-            {
+            if (context.ErrorsAsWarnings && exitCode != 0) {
                 Log.Info("One or more errors occurred, but treating it as warning instead");
 
                 exitCode = 0;
@@ -166,13 +140,11 @@ namespace GitLink
             return exitCode.Value;
         }
 
-        private static bool LinkProject(Context context, Project project, string pdbStrFile, string shaHash, string pathPdbDirectory = null)
-        {
+        private static bool LinkProject(Context context, Project project, string pdbStrFile, string shaHash, string pathPdbDirectory = null) {
             Argument.IsNotNull(() => context);
             Argument.IsNotNull(() => project);
 
-            try
-            {
+            try {
                 var projectName = project.GetProjectName();
 
                 Log.Info("Handling project '{0}'", projectName);
@@ -185,40 +157,33 @@ namespace GitLink
                 var projectPdbFile = pathPdbDirectory != null ? Path.Combine(pathPdbDirectory, Path.GetFileName(outputPdbFile)) : Path.GetFullPath(outputPdbFile);
                 var projectSrcSrvFile = projectPdbFile + ".srcsrv";
 
-                var srcSrvContext = new SrcSrvContext
-                {
+                var srcSrvContext = new SrcSrvContext {
                     Revision = shaHash,
                     RawUrl = context.Provider.RawGitUrl,
                     DownloadWithPowershell = context.DownloadWithPowershell
                 };
 
-                if (!File.Exists(projectPdbFile))
-                {
+                if (!File.Exists(projectPdbFile)) {
                     Log.Warning("No pdb file found for '{0}', is project built in '{1}' mode with pdb files enabled? Expected file is '{2}'", projectName, context.ConfigurationName, projectPdbFile);
                     return false;
                 }
 
-                if (!context.SkipVerify)
-                {
+                if (!context.SkipVerify) {
                     Log.Info("Verifying pdb file");
 
                     var missingFiles = project.VerifyPdbFiles(compilables, projectPdbFile);
-                    foreach (var missingFile in missingFiles)
-                    {
+                    foreach (var missingFile in missingFiles) {
                         Log.Warning("Missing file '{0}' or checksum '{1}' did not match", missingFile.Key, missingFile.Value);
                     }
                 }
 
-                if(!srcSrvContext.RawUrl.Contains("%var2%") && !srcSrvContext.RawUrl.Contains("{0}"))
-                {
+                if (!srcSrvContext.RawUrl.Contains("%var2%") && !srcSrvContext.RawUrl.Contains("{0}")) {
                     srcSrvContext.RawUrl = string.Format("{0}/{{0}}/%var2%", srcSrvContext.RawUrl);
                 }
-				
-                foreach (var compilable in compilables)
-                {
+
+                foreach (var compilable in compilables) {
                     var relativePathForUrl = compilable.Replace(context.SolutionDirectory, string.Empty).Replace("\\", "/");
-                    while (relativePathForUrl.StartsWith("/"))
-                    {
+                    while (relativePathForUrl.StartsWith("/")) {
                         relativePathForUrl = relativePathForUrl.Substring(1, relativePathForUrl.Length - 1);
                     }
 
@@ -226,8 +191,7 @@ namespace GitLink
                 }
 
                 // When using the VisualStudioTeamServicesProvider, add extra infomration to dictionary with VSTS-specific data
-                if (context.Provider.GetType().Name.EqualsIgnoreCase("VisualStudioTeamServicesProvider"))
-                {
+                if (context.Provider.GetType().Name.EqualsIgnoreCase("VisualStudioTeamServicesProvider")) {
                     srcSrvContext.VstsData["TFS_COLLECTION"] = context.Provider.CompanyUrl;
                     srcSrvContext.VstsData["TFS_TEAM_PROJECT"] = context.Provider.ProjectName;
                     srcSrvContext.VstsData["TFS_REPO"] = context.Provider.ProjectName;
@@ -238,14 +202,10 @@ namespace GitLink
                 Log.Debug("Created source server link file, updating pdb file '{0}'", context.GetRelativePath(projectPdbFile));
 
                 PdbStrHelper.Execute(pdbStrFile, projectPdbFile, projectSrcSrvFile);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.Warning(ex, "An error occurred while processing project '{0}'", project.GetProjectName());
                 throw;
-            }
-            finally
-            {
+            } finally {
                 Log.Unindent();
                 Log.Info(string.Empty);
             }

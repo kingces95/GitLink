@@ -1,25 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ContextFacts.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using Catel.Test;
+using GitLink.Providers;
+using NUnit.Framework;
 
-
-namespace GitLink.Tests
-{
-    using System;
-    using Catel.Test;
-    using GitLink.Providers;
-    using NUnit.Framework;
-
-    public class ContextFacts
-    {
+namespace GitLink.Tests {
+    public class ContextFacts {
         [TestFixture]
-        public class TheDefaultValues
-        {
+        public class TheDefaultValues {
             [TestCase]
-            public void SetsRightDefaultValues()
-            {
+            public void SetsRightDefaultValues() {
                 var context = new Context(new ProviderManager());
 
                 Assert.AreEqual("Release", context.ConfigurationName);
@@ -28,21 +17,17 @@ namespace GitLink.Tests
         }
 
         [TestFixture]
-        public class TheValidateContextMethod
-        {
+        public class TheValidateContextMethod {
             [TestCase]
-            public void ThrowsExceptionForMissingSolutionDirectory()
-            {
+            public void ThrowsExceptionForMissingSolutionDirectory() {
                 var context = new Context(new ProviderManager());
 
                 ExceptionTester.CallMethodAndExpectException<GitLinkException>(() => context.ValidateContext());
             }
 
             [TestCase]
-            public void ThrowsExceptionForMissingConfigurationName()
-            {
-                var context = new Context(new ProviderManager())
-                {
+            public void ThrowsExceptionForMissingConfigurationName() {
+                var context = new Context(new ProviderManager()) {
                     SolutionDirectory = @"c:\source\GitLink",
                     ConfigurationName = string.Empty
                 };
@@ -51,10 +36,8 @@ namespace GitLink.Tests
             }
 
             [TestCase]
-            public void ThrowsExceptionForMissingTargetUrl()
-            {
-                var context = new Context(new ProviderManager())
-                {
+            public void ThrowsExceptionForMissingTargetUrl() {
+                var context = new Context(new ProviderManager()) {
                     SolutionDirectory = @"c:\source\GitLink",
                 };
 
@@ -62,10 +45,8 @@ namespace GitLink.Tests
             }
 
             [TestCase]
-            public void SucceedsForValidContext()
-            {
-                var context = new Context(new ProviderManager())
-                {
+            public void SucceedsForValidContext() {
+                var context = new Context(new ProviderManager()) {
                     SolutionDirectory = @"c:\source\GitLink",
                     TargetUrl = "https://github.com/CatenaLogic/GitLink",
                 };
@@ -78,8 +59,7 @@ namespace GitLink.Tests
             [TestCase(@"C:\MyDirectory\", @"C:\MyDirectory\")]
             [TestCase(@"C:\MyDirectory\..", @"C:\")]
             [TestCase(@"C:\MyDirectory\..\TestDirectory\", @"C:\TestDirectory\")]
-            public void ExpandsDirectoryIfRequired(string solutionDirectory, string expectedValue)
-            {
+            public void ExpandsDirectoryIfRequired(string solutionDirectory, string expectedValue) {
                 Environment.CurrentDirectory = @"c:\";
 
                 var context = new Context(new ProviderManager());
@@ -87,7 +67,7 @@ namespace GitLink.Tests
                 context.SolutionDirectory = solutionDirectory;
 
                 context.ValidateContext();
-                
+
                 Assert.AreEqual(expectedValue, context.SolutionDirectory);
             }
         }

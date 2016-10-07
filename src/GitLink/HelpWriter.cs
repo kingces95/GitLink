@@ -5,24 +5,20 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace GitLink
-{
+namespace GitLink {
     using System;
     using Catel.Reflection;
 
-    public static class HelpWriter
-    {
-        public static void WriteAppHeader(Action<string> writer)
-        {
-            var assembly = typeof (HelpWriter).Assembly;
+    public static class HelpWriter {
+        public static void WriteAppHeader(Action<string> writer) {
+            var assembly = typeof(HelpWriter).Assembly;
 
             writer(string.Format("{0} v{1}", assembly.Title(), assembly.Version()));
             writer("================");
             writer(string.Empty);
         }
 
-        public static void WriteHelp(Action<string> writer)
-        {
+        public static void WriteHelp(Action<string> writer) {
             const string message = @"Update pdb files to link all sources. This will allow anyone to step through the source code while debugging without a symbol source server.
 
 Note that the solution must be built because this application will update existing pdb files.

@@ -1,25 +1,21 @@
-﻿namespace GitLink.Tests.Providers
-{
-    using GitLink.Providers;
-    using NUnit.Framework;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+﻿using GitLink.Providers;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-    public class CustomUrlProviderFacts
-    {
+namespace GitLink.Tests.Providers {
+    public class CustomUrlProviderFacts {
         private const string correctUrl = "https://bitbucket.intra.company.com/projects/aaa/repos/a/browse/{filename}?at={revision}&raw";
         [TestFixture]
-        public class TheInitialization
-        {
+        public class TheInitialization {
             [TestCase(correctUrl, true)]
             [TestCase("https://example.com/repo", false)]
             [TestCase("https://bitbucket.intra.company.com/projects/aaa/repos/a/browse/{filename}?raw", true)]
             [TestCase("gopher://example.com/repo", false)]
-            public void CorrectlyValidatesForUrls(string url, bool expectedValue)
-            {
+            public void CorrectlyValidatesForUrls(string url, bool expectedValue) {
                 var provider = new CustomUrlProvider();
                 var valid = provider.Initialize(url);
 
@@ -28,11 +24,9 @@
         }
 
         [TestFixture]
-        public class TheGitHubProviderProperties
-        {
+        public class TheGitHubProviderProperties {
             [TestCase]
-            public void ReturnsNullCompany()
-            {
+            public void ReturnsNullCompany() {
                 var provider = new CustomUrlProvider();
                 provider.Initialize(correctUrl);
 
@@ -40,8 +34,7 @@
             }
 
             [TestCase]
-            public void ReturnsNullCompanyUrl()
-            {
+            public void ReturnsNullCompanyUrl() {
                 var provider = new CustomUrlProvider();
                 provider.Initialize(correctUrl);
 
@@ -49,8 +42,7 @@
             }
 
             [TestCase]
-            public void ReturnsNullProject()
-            {
+            public void ReturnsNullProject() {
                 var provider = new CustomUrlProvider();
                 provider.Initialize(correctUrl);
 
@@ -58,8 +50,7 @@
             }
 
             [TestCase]
-            public void ReturnsNullProjectUrl()
-            {
+            public void ReturnsNullProjectUrl() {
                 var provider = new CustomUrlProvider();
                 provider.Initialize(correctUrl);
 
@@ -67,8 +58,7 @@
             }
 
             [TestCase]
-            public void ReturnsValidRawGitUrl()
-            {
+            public void ReturnsValidRawGitUrl() {
                 var provider = new CustomUrlProvider();
                 provider.Initialize(correctUrl);
 

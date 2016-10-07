@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SrcSrvContext.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2016 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
 
-
-namespace GitLink.Pdb
-{
-    using System;
-    using System.Collections.Generic;
-
-    public class SrcSrvContext
-    {
-        public SrcSrvContext()
-        {
+namespace GitLink.Pdb {
+    public class SrcSrvContext {
+        public SrcSrvContext() {
             Paths = new List<Tuple<string, string>>();
             VstsData = new Dictionary<string, string>();
 

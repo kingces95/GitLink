@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GitLinkException.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
 
-
-namespace GitLink
-{
-    using System;
-
-    public class GitLinkException : Exception
-    {
+namespace GitLink {
+    public class GitLinkException : Exception {
         public GitLinkException(string message)
-            : base(message)
-        {
+            : base(message) {
         }
     }
 }

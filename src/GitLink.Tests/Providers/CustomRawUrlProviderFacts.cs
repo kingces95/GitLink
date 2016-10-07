@@ -1,19 +1,15 @@
-﻿namespace GitLink.Tests.Providers
-{
-    using GitLink.Providers;
-    using NUnit.Framework;
+﻿using GitLink.Providers;
+using NUnit.Framework;
 
-    public class CustomRawUrlProviderFacts
-    {
+namespace GitLink.Tests.Providers {
+    public class CustomRawUrlProviderFacts {
         [TestFixture]
-        public class TheInitialization
-        {
+        public class TheInitialization {
             [TestCase("http://example.com/repo", true)]
             [TestCase("https://example.com/repo", true)]
             [TestCase("https://example.com/repo/", true)]
             [TestCase("gopher://example.com/repo", false)]
-            public void CorrectlyValidatesForUrls(string url, bool expectedValue)
-            {
+            public void CorrectlyValidatesForUrls(string url, bool expectedValue) {
                 var provider = new CustomRawUrlProvider();
                 var valid = provider.Initialize(url);
 
@@ -22,11 +18,9 @@
         }
 
         [TestFixture]
-        public class TheGitHubProviderProperties
-        {
+        public class TheGitHubProviderProperties {
             [TestCase]
-            public void ReturnsNullCompany()
-            {
+            public void ReturnsNullCompany() {
                 var provider = new CustomRawUrlProvider();
                 provider.Initialize("http://example.com/repo");
 
@@ -34,8 +28,7 @@
             }
 
             [TestCase]
-            public void ReturnsNullCompanyUrl()
-            {
+            public void ReturnsNullCompanyUrl() {
                 var provider = new CustomRawUrlProvider();
                 provider.Initialize("http://example.com/repo");
 
@@ -43,8 +36,7 @@
             }
 
             [TestCase]
-            public void ReturnsNullProject()
-            {
+            public void ReturnsNullProject() {
                 var provider = new CustomRawUrlProvider();
                 provider.Initialize("http://example.com/repo");
 
@@ -52,8 +44,7 @@
             }
 
             [TestCase]
-            public void ReturnsNullProjectUrl()
-            {
+            public void ReturnsNullProjectUrl() {
                 var provider = new CustomRawUrlProvider();
                 provider.Initialize("http://example.com/repo");
 
@@ -61,8 +52,7 @@
             }
 
             [TestCase]
-            public void ReturnsValidRawGitUrl()
-            {
+            public void ReturnsValidRawGitUrl() {
                 var provider = new CustomRawUrlProvider();
                 provider.Initialize("http://example.com/repo");
 
@@ -70,8 +60,7 @@
             }
 
             [TestCase]
-            public void ReturnsValidRawGitUrlWithNoTrailingSlash()
-            {
+            public void ReturnsValidRawGitUrlWithNoTrailingSlash() {
                 var provider = new CustomRawUrlProvider();
                 provider.Initialize("http://example.com/repo/");
 
