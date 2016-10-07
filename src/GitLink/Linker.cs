@@ -1,20 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Linker.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using Catel;
+using Catel.Logging;
+using GitTools;
+using Microsoft.Build.Evaluation;
 
 namespace GitLink {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using Catel;
-    using Catel.Logging;
-    using GitTools;
-    using Microsoft.Build.Evaluation;
     using Pdb;
 
     /// <summary>

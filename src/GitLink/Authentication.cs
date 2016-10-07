@@ -1,12 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Authentication.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+using System;
 
 namespace GitLink {
-    using System;
 
     public class Authentication {
         public Authentication() {

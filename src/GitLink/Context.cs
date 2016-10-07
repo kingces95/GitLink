@@ -1,16 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Context.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using Catel;
+using Catel.IO;
+using Catel.Logging;
+using GitTools;
 
 namespace GitLink {
-    using System;
-    using System.Collections.Generic;
-    using Catel;
-    using Catel.IO;
-    using Catel.Logging;
-    using GitTools;
     using Providers;
 
     public class Context : RepositoryContext {

@@ -1,14 +1,7 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HelpWriter.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+using System;
+using Catel.Reflection;
 
 namespace GitLink {
-    using System;
-    using Catel.Reflection;
-
     public static class HelpWriter {
         public static void WriteAppHeader(Action<string> writer) {
             var assembly = typeof(HelpWriter).Assembly;

@@ -1,13 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Program.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+﻿using System;
+using Catel.Logging;
 
 namespace GitLink {
-    using System;
-    using Catel.Logging;
     using Logging;
 
     internal class Program {

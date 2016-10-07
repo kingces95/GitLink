@@ -1,21 +1,14 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ArgumentParser.cs" company="CatenaLogic">
-//   Copyright (c) 2014 - 2014 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Catel.Collections;
+using Catel.Logging;
+using GitLink.Providers;
+using GitTools;
+using GitTools.Git;
+using LibGit2Sharp;
 
 namespace GitLink {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Catel.Collections;
-    using Catel.Logging;
-    using GitLink.Providers;
-    using GitTools;
-    using GitTools.Git;
-    using LibGit2Sharp;
-
     public static class ArgumentParser {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
